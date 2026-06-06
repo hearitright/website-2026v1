@@ -47,6 +47,38 @@
     });
   }
 
+  /* ---- Cookie consent banner ---- */
+  (function () {
+    var KEY = 'hir_cookie_consent';
+    if (localStorage.getItem(KEY)) return;
+
+    var banner = document.createElement('div');
+    banner.className = 'cookie-banner';
+    banner.setAttribute('role', 'dialog');
+    banner.setAttribute('aria-label', 'Cookie consent');
+    banner.innerHTML =
+      '<p class="cookie-banner__title">We use cookies</p>' +
+      '<p class="cookie-banner__text">We use analytics and visitor tools to improve your experience. ' +
+      'See our <a href="cookie-policy.html">Cookie Policy</a> for details.</p>' +
+      '<div class="cookie-banner__actions">' +
+        '<button class="cookie-banner__decline">Decline</button>' +
+        '<button class="cookie-banner__accept">Accept All</button>' +
+      '</div>';
+    document.body.appendChild(banner);
+
+    setTimeout(function () { banner.classList.add('visible'); }, 700);
+
+    function dismiss(choice) {
+      localStorage.setItem(KEY, choice);
+      banner.classList.remove('visible');
+      banner.classList.add('hiding');
+      setTimeout(function () { banner.remove(); }, 420);
+    }
+
+    banner.querySelector('.cookie-banner__accept').addEventListener('click', function () { dismiss('accepted'); });
+    banner.querySelector('.cookie-banner__decline').addEventListener('click', function () { dismiss('declined'); });
+  }());
+
   /* ---- Contact form ---- */
   var form = document.querySelector('.js-contact-form');
   if (form) {
